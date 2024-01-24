@@ -14,12 +14,11 @@ from win32con import MB_OK, MB_YESNO, IDNO, IDCLOSE
 from win32api import MessageBox
 from pygame import mixer
 
-
+music_dir = "D:/programming/python/my_clock/music"  # 绝对路径
 time_work = 30
 time_break = 10
 loop_play_max = 10
 play = True
-music_dir = path.dirname(__file__)+"/music/"
 music_start_path = music_dir + "start/"
 music_end_path = music_dir + "end/"
 processes = []

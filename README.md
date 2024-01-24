@@ -11,6 +11,7 @@ pip install -r requirements.txt
 
 ### 测试运行
 
+- 配置音乐文件夹绝对路径
 - 运行aclock.py
 
 ### 打包
