@@ -4,6 +4,6 @@ dist/
 venv/
 .idea/
 *.ico
-music/end/*
-music/start/*
+music/end/*.*
+music/start/*.*
 music/error.txt
