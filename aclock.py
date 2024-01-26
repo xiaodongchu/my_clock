@@ -1,10 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-@Modify Time          @Author      @Version    @Description
---------------      -----------    --------    ------------
-2023/3/13 14:43     chuxiaodong      1.0           None
-"""
-
 from os import listdir
 from time import sleep
 from random import choice
@@ -35,9 +28,11 @@ def show(show_s, start=True):
     if play:
         if start:
             file_list = listdir(music_start_path)
+            file_list = [i for i in file_list if i.endswith(".mp3")]
             file_list = music_start_path + choice(file_list)
         else:
             file_list = listdir(music_end_path)
+            file_list = [i for i in file_list if i.endswith(".mp3")]
             file_list = music_end_path + choice(file_list)
         mixer.music.load(file_list)
         mixer.music.play(loop_play_max)
