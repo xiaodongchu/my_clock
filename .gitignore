@@ -4,8 +4,6 @@ dist/*.*
 venv/
 .idea/
 aclock.spec
-*.ico
-music/end/*.*
-music/start/*.*
-music/error.txt
+end/*.*
+start/*.*
 !*.info

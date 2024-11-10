@@ -1,79 +1,64 @@
-from os import listdir
-from time import sleep
-from random import choice
-from traceback import print_exc
-from multiprocessing import Process as process
-
-from win32con import MB_OK, MB_YESNOCANCEL, IDYES, IDNO
-from win32api import MessageBox
-from pygame import mixer
-
-music_dir = "D:/programming/python/my_clock/music/"  # 绝对路径
-time_work = 30  # 单位：分钟
-time_break = 10  # 单位：分钟
-loop_play_max = 3
-play = True
-music_start_path = music_dir + "start/"
-music_end_path = music_dir + "end/"
-error_path = music_dir + "error.txt"
-process_list = []
-mixer.init()
+import sys
+from functools import partial
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+from PySide6.QtGui import QIcon, QAction
+from timer_widget import PomodoroTimer
 
 
-def show(show_s, start=True):
-    while len(process_list) > 0 and start:
-        process1 = process_list.pop()
-        if process1 is not None and process1.is_alive():
-            process1.terminate()
-    if play:
-        if start:
-            file_list = listdir(music_start_path)
-            file_list = [i for i in file_list if i.endswith(".mp3")]
-            file_list = music_start_path + choice(file_list)
-        else:
-            file_list = listdir(music_end_path)
-            file_list = [i for i in file_list if i.endswith(".mp3")]
-            file_list = music_end_path + choice(file_list)
-        mixer.music.load(file_list)
-        mixer.music.play(loop_play_max)
-        MessageBox(0, show_s, "提醒", MB_OK)
-        mixer.music.stop()
-    else:
-        MessageBox(0, show_s, "提醒", MB_OK)
+class PomodoroApp(QApplication):
+    def __init__(self, argv):
+        super().__init__(argv)
+        self.setQuitOnLastWindowClosed(False)
 
+        # 创建主窗口
+        self.window = PomodoroTimer()
+        self.window.setWindowTitle("番茄时钟")
 
-def choose_play():
-    global play
-    s = "是否播放音乐？\n将开始{}+{}循环计时。\n单击取消推出计时".format(time_work, time_break)
-    i = MessageBox(0, s, "提醒", MB_YESNOCANCEL)
-    if i == IDNO:
-        play = False
-    elif i == IDYES:
-        play = True
-    else:
-        return 0
-    loop_run()
+        # 创建系统托盘图标
+        self.tray_icon = QSystemTrayIcon(QIcon("aclock.ico"), self)
+        self.tray_icon.setToolTip("番茄时钟")
 
+        # 创建系统托盘菜单
+        self.menu = QMenu()
 
-def loop_run():
-    try:
-        loop_time = 0
-        while True:
-            sleep(time_work * 60)
-            text = "休息{}分钟。".format(time_break)
-            process1 = process(target=show, args=(text, False))
-            process1.start()
-            process_list.append(process1)
-            sleep(time_break * 60)
-            loop_time += 1
-            text = "休息结束，开始{}分钟工作。\n这是{}次循环。".format(time_work, loop_time)
-            show(text, True)
-    except:
-        f = open(error_path, "w", encoding="utf-8")
-        print_exc(file=f)
-        f.close()
-        MessageBox(0, "aclock程序出错，\n请查看error.txt。", "提醒", MB_OK)
+        self.start_short_break_action = QAction("开始短休息")
+        self.start_short_break_action.triggered.connect(partial(self.window.start_timer, "short_break"))
+
+        self.start_long_break_action = QAction("开始长休息")
+        self.start_long_break_action.triggered.connect(partial(self.window.start_timer, "long_break"))
+
+        self.start_work_action = QAction("开始工作")
+        self.start_work_action.triggered.connect(partial(self.window.start_timer, "work"))
+
+        self.reset_timer_action = QAction("重置计时")
+        self.reset_timer_action.triggered.connect(self.window.reset_timer)
+
+        self.stop_play_action = QAction("停止播放")
+        self.stop_play_action.triggered.connect(self.window.stop_play)
+
+        self.exit_action = QAction("退出")
+        self.exit_action.triggered.connect(self.quit)
+
+        self.menu.addAction(self.start_short_break_action)
+        self.menu.addAction(self.start_long_break_action)
+        self.menu.addAction(self.start_work_action)
+        self.menu.addAction(self.reset_timer_action)
+        self.menu.addAction(self.stop_play_action)
+        self.menu.addAction(self.exit_action)
+
+        self.tray_icon.setContextMenu(self.menu)
+        self.tray_icon.activated.connect(self.toggle_window)
+        self.tray_icon.show()
+
+    def toggle_window(self, reason):
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:
+            if self.window.isVisible():
+                self.window.hide()
+            else:
+                self.window.show()
 
 
 if __name__ == '__main__':
-    choose_play()
+    app = PomodoroApp(sys.argv)
+    app.window.show()
+    sys.exit(app.exec())
