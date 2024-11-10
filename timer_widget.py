@@ -19,6 +19,7 @@ class PomodoroTimer(QWidget):
         self.long_break_interval_helper = 0  # 长休息间隔计数器
         self.tag = "工作"  # 当前状态 工作/休息/长休息
         self.time_left = self.work_duration
+        self.is_muted = False  # 是否静音
 
         # 初始化音频
         pygame.mixer.init()
@@ -74,6 +75,7 @@ class PomodoroTimer(QWidget):
                 self.time_left = self.work_duration
                 self.tag = "工作"
         self.timer.start()
+        self.show()
 
     @staticmethod
     def format_time(seconds):
@@ -81,17 +83,17 @@ class PomodoroTimer(QWidget):
         return f"{minutes:02}:{seconds:02}"
 
     def play_sound(self, is_start=True):
-        if is_start:
-            file_list = os.listdir(start_sound_path)
-            file_list = [i for i in file_list if i.endswith(".mp3")]
-            file_list = start_sound_path + choice(file_list)
-        else:
-            file_list = os.listdir(end_sound_path)
-            file_list = [i for i in file_list if i.endswith(".mp3")]
-            file_list = end_sound_path + choice(file_list)
-        pygame.mixer.music.load(file_list)
-        pygame.mixer.music.play()
-        self.show()
+        if not self.is_muted:
+            if is_start:
+                file_list = os.listdir(start_sound_path)
+                file_list = [i for i in file_list if i.endswith(".mp3")]
+                file_list = start_sound_path + choice(file_list)
+            else:
+                file_list = os.listdir(end_sound_path)
+                file_list = [i for i in file_list if i.endswith(".mp3")]
+                file_list = end_sound_path + choice(file_list)
+            pygame.mixer.music.load(file_list)
+            pygame.mixer.music.play()
 
     @staticmethod
     def stop_play():
@@ -117,10 +119,16 @@ class PomodoroTimer(QWidget):
         event.accept()
 
     def play_random_sound(self):
-        file_list = os.listdir(start_sound_path)
-        file_list = [start_sound_path + i for i in file_list if i.endswith(".mp3")]
-        end_list = os.listdir(end_sound_path)
-        end_list = [end_sound_path + i for i in end_list if i.endswith(".mp3")]
-        music_path = choice(file_list + end_list)
-        pygame.mixer.music.load(music_path)
-        pygame.mixer.music.play()
+        if not self.is_muted:
+            file_list = os.listdir(start_sound_path)
+            file_list = [start_sound_path + i for i in file_list if i.endswith(".mp3")]
+            end_list = os.listdir(end_sound_path)
+            end_list = [end_sound_path + i for i in end_list if i.endswith(".mp3")]
+            music_path = choice(file_list + end_list)
+            pygame.mixer.music.load(music_path)
+            pygame.mixer.music.play()
+
+    def toggle_mute(self):
+        self.is_muted = not self.is_muted
+        if self.is_muted:
+            pygame.mixer.music.stop()

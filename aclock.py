@@ -41,6 +41,11 @@ class PomodoroApp(QApplication):
         self.play_random_action = QAction("随机一曲")
         self.play_random_action.triggered.connect(self.window.play_random_sound)
 
+        self.mute_action = QAction("静音")
+        self.mute_action.setCheckable(True)
+        self.mute_action.setChecked(self.window.is_muted)
+        self.mute_action.triggered.connect(self.window.toggle_mute)
+
         self.exit_action = QAction("退出")
         self.exit_action.triggered.connect(self.quit)
 
@@ -50,6 +55,7 @@ class PomodoroApp(QApplication):
         self.menu.addAction(self.reset_timer_action)
         self.menu.addAction(self.stop_play_action)
         self.menu.addAction(self.play_random_action)
+        self.menu.addAction(self.mute_action)
         self.menu.addAction(self.exit_action)
 
         self.tray_icon.setContextMenu(self.menu)
