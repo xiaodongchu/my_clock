@@ -4,22 +4,22 @@
 ### 安装需求
 
 ```bash
-# 推荐python版本3.7+
+# 推荐python版本3.11+
 # 推荐在conda或venv等虚拟环境中运行
 pip install -r requirements.txt
 ```
 
 ### 测试运行
 
-- 配置音乐文件夹绝对路径
-- 运行aclock.py
+- 在`config.py`中配置绝对路径
+- 运行`aclock.py`
 
 ### 打包
 
 ```bash
 # 推荐在conda或venv等虚拟环境中运行，否则可能导致打包过大。
 # 推荐使用字母a开头的名称，若遇到问题，在任务管理器中可以轻松找到，并强制停止运行。
-pyinstaller --name=aclock aclock.py -w -F # -i aclock.ico # （可选）定制图标
+pyinstaller --name=aclock aclock.py -w -F -i aclock.ico
 ```
 
 ### 设置开机启动

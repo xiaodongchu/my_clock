@@ -6,4 +6,5 @@ venv/
 aclock.spec
 end/*.*
 start/*.*
+*.exe
 !*.info

@@ -1,4 +1,3 @@
-import json
 import os
 from random import choice
 
@@ -6,22 +5,17 @@ import pygame
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
 
-base_path = os.path.dirname(__file__) + '/'
-start_sound_path = base_path + 'start/'
-end_sound_path = base_path + 'end/'
-config_path = base_path + 'config.json'
-with open(config_path, 'r') as f:
-    config = json.load(f)
+from config import *
 
 
 class PomodoroTimer(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.work_duration = config["work_time"] * 60  # 工作时间
-        self.break_duration = config["break_time"] * 60  # 休息时间
-        self.long_break_duration = config["long_break_time"] * 60  # 长休息时间
-        self.long_break_interval = config["long_break_interval"]  # 长休息间隔
+        self.work_duration = work_time * 60  # 工作时间
+        self.break_duration = break_time * 60  # 休息时间
+        self.long_break_duration = long_break_time * 60  # 长休息时间
+        self.long_break_interval = long_break_interval  # 长休息间隔
         self.long_break_interval_helper = 0  # 长休息间隔计数器
         self.tag = "工作"  # 当前状态 工作/休息/长休息
         self.time_left = self.work_duration
