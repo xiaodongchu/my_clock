@@ -4,7 +4,7 @@ from functools import partial
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 
-from timer_widget import PomodoroTimer
+from timer_widget import PomodoroTimer, icon_path
 
 
 class PomodoroApp(QApplication):
@@ -17,7 +17,7 @@ class PomodoroApp(QApplication):
         self.window.setWindowTitle("番茄时钟")
 
         # 创建系统托盘图标
-        self.tray_icon = QSystemTrayIcon(QIcon("aclock.ico"), self)
+        self.tray_icon = QSystemTrayIcon(QIcon(icon_path), self)
         self.tray_icon.setToolTip("番茄时钟")
 
         # 创建系统托盘菜单
