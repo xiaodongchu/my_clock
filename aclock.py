@@ -1,7 +1,9 @@
 import sys
 from functools import partial
-from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+
 from PySide6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+
 from timer_widget import PomodoroTimer
 
 
@@ -22,19 +24,22 @@ class PomodoroApp(QApplication):
         self.menu = QMenu()
 
         self.start_short_break_action = QAction("开始短休息")
-        self.start_short_break_action.triggered.connect(partial(self.window.start_timer, "short_break"))
+        self.start_short_break_action.triggered.connect(partial(self.window.switch_mode, "休息"))
 
         self.start_long_break_action = QAction("开始长休息")
-        self.start_long_break_action.triggered.connect(partial(self.window.start_timer, "long_break"))
+        self.start_long_break_action.triggered.connect(partial(self.window.switch_mode, "长休息"))
 
         self.start_work_action = QAction("开始工作")
-        self.start_work_action.triggered.connect(partial(self.window.start_timer, "work"))
+        self.start_work_action.triggered.connect(partial(self.window.switch_mode, "工作"))
 
         self.reset_timer_action = QAction("重置计时")
         self.reset_timer_action.triggered.connect(self.window.reset_timer)
 
         self.stop_play_action = QAction("停止播放")
         self.stop_play_action.triggered.connect(self.window.stop_play)
+
+        self.play_random_action = QAction("随机一曲")
+        self.play_random_action.triggered.connect(self.window.play_random_sound)
 
         self.exit_action = QAction("退出")
         self.exit_action.triggered.connect(self.quit)
@@ -44,6 +49,7 @@ class PomodoroApp(QApplication):
         self.menu.addAction(self.start_work_action)
         self.menu.addAction(self.reset_timer_action)
         self.menu.addAction(self.stop_play_action)
+        self.menu.addAction(self.play_random_action)
         self.menu.addAction(self.exit_action)
 
         self.tray_icon.setContextMenu(self.menu)
@@ -53,7 +59,7 @@ class PomodoroApp(QApplication):
     def toggle_window(self, reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
             if self.window.isVisible():
-                self.window.hide()
+                self.window.close()
             else:
                 self.window.show()
 
