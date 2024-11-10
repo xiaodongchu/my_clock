@@ -1,5 +1,6 @@
 # my_clock
-一个提醒休息的计时器
+
+一个适用于Windows系统的提醒休息计时器，使用Python + QT6
 
 ### 安装需求
 
@@ -24,7 +25,7 @@ pyinstaller --name=aclock aclock.py -w -F -i aclock.ico
 
 ### 设置开机启动
 
-```
+``` bash
 # 为打包好的exe文件创建快捷方式
 # 将快捷方式复制入“启动”文件夹
 # 在windows系统中，路径大致为：
