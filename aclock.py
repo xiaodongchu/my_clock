@@ -1,10 +1,11 @@
 import sys
+import traceback
 from functools import partial
 
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 
-from timer_widget import PomodoroTimer, icon_path
+from timer_widget import PomodoroTimer, icon_path, error_path
 
 
 class PomodoroApp(QApplication):
@@ -71,6 +72,13 @@ class PomodoroApp(QApplication):
 
 
 if __name__ == '__main__':
-    app = PomodoroApp(sys.argv)
-    app.window.show()
-    sys.exit(app.exec())
+    try:
+        app = PomodoroApp(sys.argv)
+        app.window.show()
+        sys.exit(app.exec())
+    except Exception as e:
+        f = open(error_path, 'a', encoding='utf-8')
+        f.write(traceback.format_exc())
+        f.write('\n' + str(e) + '\n')
+        f.close()
+        sys.exit(1)

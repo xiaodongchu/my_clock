@@ -43,16 +43,16 @@ class PomodoroTimer(QWidget):
         else:
             self.switch_mode()
 
-    def switch_mode(self, swich_mode=""):
+    def switch_mode(self, switch_mode=""):
         self.timer.stop()
         self.stop_play()
-        if swich_mode:
+        if switch_mode:
             if self.tag == "工作":
                 self.long_break_interval_helper += 1
-            if swich_mode == "工作":
+            if switch_mode == "工作":
                 self.time_left = self.work_duration
                 self.tag = "工作"
-            elif swich_mode == "休息":
+            elif switch_mode == "休息":
                 self.time_left = self.break_duration
                 self.tag = "休息"
             else:
