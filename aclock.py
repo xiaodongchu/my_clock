@@ -75,10 +75,11 @@ if __name__ == '__main__':
     try:
         app = PomodoroApp(sys.argv)
         app.window.show()
-        sys.exit(app.exec())
+        app.exec()
     except Exception as e:
         f = open(error_path, 'a', encoding='utf-8')
         f.write(traceback.format_exc())
         f.write('\n' + str(e) + '\n')
         f.close()
-        sys.exit(1)
+    finally:
+        sys.exit(0)

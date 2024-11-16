@@ -12,7 +12,19 @@ pip install -r requirements.txt
 
 ### 测试运行
 
-- 在`config.py`中配置绝对路径
+- 在`config.py`中配置**当前文件夹绝对路径**
+
+```bash
+当前文件夹目录树如下：
+│   aclock.ico # 图标文件
+│   aclock.py # 主程序
+│   config.py # 配置文件
+│   requirements.txt # 依赖库
+│   timer_widget.py # 计时器窗口
+├───end # 休息提示音乐文件夹
+├───start # 工作提示音乐文件夹
+```
+
 - 运行`aclock.py`
 
 ### 打包
@@ -32,3 +44,8 @@ pyinstaller --name=aclock aclock.py -w -F -i aclock.ico
 %USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 ```
 
+### 播放音乐
+
+- 在`start`文件夹中放入工作提示音乐
+- 在`end`文件夹中放入休息提示音乐
+- 音乐文件格式为`.mp3`
