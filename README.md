@@ -37,10 +37,13 @@ pyinstaller --name=aclock aclock.py -w -F -i aclock.ico
 
 ### 设置开机启动
 
+- 打包好的exe文件在`dist`文件夹中`dist/aclock.exe`
+- 为`aclock.exe`创建快捷方式，不要移动exe文件
+- 将快捷方式复制入“启动”文件夹
+
+在windows系统中，“启动”文件夹路径为：
+
 ``` bash
-# 为打包好的exe文件创建快捷方式
-# 将快捷方式复制入“启动”文件夹
-# 在windows系统中，路径大致为：
 %USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 ```
 
